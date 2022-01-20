@@ -1,0 +1,9 @@
+tesseract-ocr
+tesseract-ocr-eng
+build-essential
+gfortran
+libgfortran3
+python-dev
+libblas-dev
+libatlas-base-dev
+cython
