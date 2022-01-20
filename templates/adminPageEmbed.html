@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Document</title>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+      <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+
+      <style>
+         body {
+           margin: 0;
+         }
+         
+         ul {
+           list-style-type: none;
+           margin: 0;
+           padding: 0;
+           width: 15%;
+           background-color: #f1f1f1;
+           position: fixed;
+           height: 100%;
+           overflow: auto;
+         }
+         
+         li a {
+           display: block;
+           color: #000;
+           padding: 8px 16px;
+           text-decoration: none;
+         }
+         
+         li a.active {
+           background-color: #04AA6D;
+           color: white;
+         }
+         
+         li a:hover:not(.active) {
+           background-color: #555;
+           color: white;
+         }
+         </style>
+   </head>
+   <body>
+      <ul>
+         <li><a  href="" style="font-weight: bold; font-size: large; font-family: sans-serif;">STEGA SIVIL</a></li>
+         <li><a class="active" href="{{ url_for('adminPages') }}"">Embedding Data</a></li>
+         <li><a href="{{ url_for('dbpages') }}">Database</a></li>
+       </ul>
+       
+       <div style="margin-left:25%;padding:1px 16px;height:1000px;">
+         <div class="file-upload">
+            <button class="file-upload-btn" type="button" onclick="$('.file-upload-input').trigger( 'click' )">Upload Ijazah</button>
+            <div class="image-upload-wrap">
+               <form action="" method="POST" enctype="multipart/form-data">
+                  <input class="file-upload-input" type='file' name='diploma' onchange="readURL(this);" accept="image/*" />
+                  <div class="drag-text">
+                     <h3>Tambahkan gambar</h3>
+                  </div>
+            </div>
+            <div class="file-upload-content">
+            <img class="file-upload-image" src="#" alt="your image" />
+            <div class="image-title-wrap">
+            <button type="button" onclick="removeUpload()" class="remove-image">Hapus gambar <span class="image-title"></span></button>
+            </div>
+            <div class="image-title-wrap">
+               <div class="form-group mx-sm-3 mb-2">
+                  <input type="text" name ="dipID" minlength="10" class="form-control" id="inputPassword2" placeholder="Diploma Id"> <input type="text" name="dipNum" class="form-control" id="inputnumber" placeholder="Diploma Number">
+                </div>
+            <button id='test' class="detect-forgery" type="submit">Embed</button>
+            </form>
+            </div>
+            </div>
+            <div class="file-output-content">
+            </div>
+         </div>
+       </div>
+      
+
+      
+
+   </body>
+   <script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+
+   <script>
+      function readURL(input) {
+          if (input.files && input.files[0]) {
+        
+            var reader = new FileReader();
+        
+            reader.onload = function(e) {
+              $('.image-upload-wrap').hide();
+        
+              $('.file-upload-image').attr('src', e.target.result);
+              $('.file-upload-content').show();
+        
+              $('.image-title').html(input.files[0].name);
+            };
+        
+            reader.readAsDataURL(input.files[0]);
+        
+          } else {
+            removeUpload();
+          }
+        }
+        
+        function removeUpload() {
+          $('.file-upload-input').replaceWith($('.file-upload-input').clone());
+          $('.file-upload-content').hide();
+          $('.image-upload-wrap').show();
+        }
+      
+        $('.image-upload-wrap').bind('dragover', function () {
+            $('.image-upload-wrap').addClass('image-dropping');
+          });
+        $('.image-upload-wrap').bind('dragleave', function () {
+            $('.image-upload-wrap').removeClass('image-dropping');
+          });
+        
+   </script>
+</html>
