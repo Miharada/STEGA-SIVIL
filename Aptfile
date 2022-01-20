@@ -1,4 +1,4 @@
-tesseract-ocr libtesseract-dev libleptonica-dev pkg-config
+tesseract-ocr libtesseract-dev libleptonica-dev
 build-essential
 gfortran
 libgfortran3
