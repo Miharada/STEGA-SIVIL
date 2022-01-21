@@ -272,7 +272,7 @@ def validationOCR(img, data):
   img_bytes = img.tobytes()
   bpl = bpp * w
   
-  pytesseract.pytesseract.tesseract_cmd = r'/app/.apt/usr/bin/tesseract'
+  pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract'
   custom_config = r'--oem 3 --psm 6'
   text = pytesseract.image_to_string(img, config=custom_config)
   if text.find(data['number']) != -1:
