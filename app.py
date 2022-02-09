@@ -42,17 +42,6 @@ def allowed_file(filename):
 	return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-# def createDB(dbname):
-#   db = sqlite3.connect(dbname+".db")
-#   db.execute("drop table if exists validation")
-#   try:
-#     db.execute("create table validation(id,seed)")
-#   except:
-#     print("Table Already Exists !!!")
-
-# db = createDB("val")
-
-
 @app.route('/')
 def home_page():
     return render_template('validationPage.html')
@@ -66,7 +55,6 @@ def uploadDiplomas():
         flash("No image selected for uploading")
         return redirect(request.url)
     if file and allowed_file(file.filename):
-        #https://stackoverflow.com/questions/27517688/can-an-uploaded-image-be-loaded-directly-by-cv2
         img = cv2.imdecode(np.frombuffer(request.files['diploma'].read(), np.uint8), cv2.IMREAD_UNCHANGED)
 
         if (RealValidation(img)):
@@ -97,11 +85,11 @@ def embedDiplomas():
         return redirect(request.url)
     if file and allowed_file(file.filename):
         number = request.form.get('dipNum', False)
-        ids = request.form.get('dipID', False)
+        # ids = request.form.get('dipID', False)
         img = cv2.imdecode(np.frombuffer(request.files['diploma'].read(), np.uint8), cv2.IMREAD_UNCHANGED)
         img = np.array(img)[:,:,:-1]
-        emb_img = Embedding(img, ids, number)
-        cv2.imwrite("Embedded Diploma/Diploma_"+ids+".png", emb_img)
+        emb_img = Embedding(img, number)
+        cv2.imwrite("Embedded Diploma/Diploma_"+number+".png", emb_img)
     return render_template("adminPageEmbed.html")
 
 @app.route('/dbpage')
@@ -109,7 +97,6 @@ def dbpages():
     if not g.user:
         return redirect(url_for('loginAdmin'))
     data = getDb()
-    # print(data)
     return render_template("adminPageDb.html", datas=data)
 
 @app.route('/loginadmin', methods=['GET','POST'])
@@ -150,8 +137,4 @@ def removeData():
 if __name__ == "__main__":
     app.run(debug=False)
 
-
-
-#https://roytuts.com/upload-and-display-image-using-python-flask/
-#https://medium.com/@marioruizgonzalez.mx/how-install-tesseract-orc-and-pytesseract-on-windows-68f011ad8b9b
 

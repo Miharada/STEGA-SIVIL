@@ -1,7 +1,6 @@
 import cv2
 import numpy as np
 
-import pytesseract
 from numba import njit
 
 from numba.typed import List
@@ -188,7 +187,7 @@ def stackImage(C2_Block, height, width):
     index2 += width//3
   return np.array(z)
 
-def insertData(id, seed):
+def updateData(id, seed):
   db = sqlite3.connect("val.db")
   cek = "SELECT id FROM validation WHERE id='{}'".format(id)
   rs = db.execute(cek).fetchall()
@@ -200,14 +199,31 @@ def insertData(id, seed):
 
   db.commit()
 
-def Embedding(img, id, number):
+def insertData(seed):
+  db = sqlite3.connect("val.db")
+  cek = "SELECT id FROM validation".format(id)
+  rs = db.execute(cek).fetchall()
+  if len(rs) == 0:
+    ids = "000"
+    cmd = "insert into validation(id,seed) values('{}','{}')".format(ids,seed)
+  else:
+    QueryLastRow = "SELECT id FROM validation WHERE id=(SELECT max(id) FROM validation)"
+    LastId = db.execute(QueryLastRow).fetchall()[0][0]
+    ids = str(int(LastId)+1).zfill(3)
+    cmd = "insert into validation(id,seed) values('{}','{}')".format(ids,seed)
+
+  db.execute(cmd)
+  db.commit()
+  return ids
+
+def Embedding(img, number):
   img = cv2.resize(img, (1122,792))
   height, width = 792, 1122
 
   subBlock = SubBlockImage(img, height, width)
   Lidx, seed = generateRandInd(len(subBlock))
   mapL, mapS, C = OverUnder_Flow_Handle(subBlock, Lidx)
-  insertData(id, seed)
+  id = insertData(seed)
 
   embid = stringTobit(id)
   data = InData(number, mapS, mapL)
